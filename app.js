@@ -12,7 +12,9 @@ let movies = [{
 }]
 
 getRows();
+
 let addMovieButton = document.getElementById('addMovie_button');
+let addMovieForm = document.getElementById('addMovieForm');
 
 function fillGodine() {
     let year = document.getElementById('movie_year')
@@ -80,6 +82,7 @@ function addMovie(movie) {
                         <td><ul>${actorsContent}</ul></td>
                     </tr>`;
     document.getElementById('movies_table_body').innerHTML += tableContent;
+    addMovieForm.reset();
 }
 
 function getSelected(val) {
