@@ -128,12 +128,13 @@ addMovieButton.addEventListener('click', (elem) => {
 
 function filterMovies() {
     let term = document.getElementById('term_input').value.toLowerCase();
-    let searchRes = []
-    movies.forEach((movie) => {
-        if (movie.name.toLowerCase().includes(term) || movie.year.includes(term) || movie.country.toLowerCase().includes(term)) {
-            searchRes.push(movie);
-        }
-    });
+    let searchRes = movies.filter((movie) => (movie.name.toLowerCase().includes(term) || movie.year.includes(term) || movie.country.toLowerCase().includes(term)))
+    // let searchRes = []
+    // movies.forEach((movie) => {
+    //     if (movie.name.toLowerCase().includes(term) || movie.year.includes(term) || movie.country.toLowerCase().includes(term)) {
+    //         searchRes.push(movie);
+    //     }
+    // });
     displayMovies(searchRes);
 }
 
