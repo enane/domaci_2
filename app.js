@@ -11,7 +11,12 @@ let movies = [{
     watched: false, name: 'film3', year: '2011', country: 'zemlja3', note: ' dfdfdf fgdg sdfd', actors: ['glumac1']
 }]
 
-getRows();
+// getRows();
+
+document.getElementById('search_form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    filterMovies();
+});
 
 let addMovieButton = document.getElementById('addMovie_button');
 let addMovieForm = document.getElementById('addMovieForm');
@@ -99,33 +104,45 @@ function getSelected(val) {
     }
 }
 
-addMovieButton.addEventListener('click', (elem)=>{
+addMovieButton.addEventListener('click', (elem) => {
     checkMovieInput();
 });
 
+function filterMovies() {
+    let term = document.getElementById('term_input').value.toLowerCase();
+    let searchRes = []
+    movies.forEach((movie) => {
+        if (movie.name.toLowerCase().includes(term) || movie.year.includes(term) || movie.country.toLowerCase().includes(term)) {
 
-function getRows() {
-    //Reference the Table.
-    var grid = document.getElementById("movies_table_body");
+            searchRes.push(movie);
+        }
+    });
+    movies = searchRes;
+    displayMovies();
+}
 
-    //Reference the CheckBoxes in Table.
-    var rows = grid.getElementsByTagName("tr");
-    console.log(rows)
-    console.log(rows[2])
-    console.log(rows.length)
-    for (let item of rows) {
-        console.log(item)
-    }
+// function getRows() {
+//     //Reference the Table.
+//     var grid = document.getElementById("movies_table_body");
+//
+//     //Reference the CheckBoxes in Table.
+//     var rows = grid.getElementsByTagName("tr");
+//     console.log(rows)
+//     console.log(rows[2])
+//     console.log(rows.length)
+//     for (let item of rows) {
+//         console.log(item)
+//     }
 
 
-    function displayMovies() {
-        let tableContent = '';
-        movies.forEach((movie) => {
-            let actorsContent = ''
-            movie.actors.forEach((actor) => {
-                actorsContent += `<li>${actor}</li>`
-            })
-            tableContent += `<tr class="table-danger text-center">
+function displayMovies() {
+    let tableContent = '';
+    movies.forEach((movie) => {
+        let actorsContent = ''
+        movie.actors.forEach((actor) => {
+            actorsContent += `<li>${actor}</li>`
+        })
+        tableContent += `<tr class="table-danger text-center">
                             <td>
                                 <input class='form-check-input' type="checkbox" onclick="getSelected(this)">
                                 <input type='hidden' value=${movie.watched}>
@@ -136,10 +153,10 @@ function getRows() {
                             <td>${movie.note}</td>
                             <td><ul>${actorsContent}</ul></td>
                          </tr>`;
-        });
-        document.getElementById('movies_table_body').innerHTML = tableContent;
-    }
-
-    fillGodine();
-    displayMovies();
+    });
+    document.getElementById('movies_table_body').innerHTML = tableContent;
 }
+
+
+fillGodine();
+displayMovies();
