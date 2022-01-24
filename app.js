@@ -47,11 +47,29 @@ function checkMovieInput() {
     let name = document.getElementById('movie_name')
     let year = document.getElementById('movie_year')
     if (name.value == '') {
+        document.getElementById('movie_nameFeedback').innerHTML = 'Please enter movie name.'
         name.classList.add('is-invalid')
         rez = false
-    } else {
-        name.classList.remove('is-invalid')
+     }
+    else{
+        if (containsMovie(name.value)) {
+                console.log(containsMovie(name.value));
+                console.log('sadrzi film')
+                document.getElementById('movie_nameFeedback').innerHTML = 'Movie already exists.';
+                name.classList.add('is-invalid');
+                rez = false;
+            } else {
+            console.log(containsMovie(name.value));
+            name.classList.remove('is-invalid');
+        }
     }
+    //else if (containsMovie(name.value)) {
+    //     console.log(containsMovie(name.value));
+    //     console.log('sadrzi film')
+    //     document.getElementById('movie_nameFeedback').innerHTML = 'Movie already exists.';
+    //     name.classList.add('is-invalid');
+    //     rez = false;
+    // } else name.classList.remove('is-invalid');
     if (year.value > 2022 || year.value < 1895) {
         year.classList.add('is-invalid')
         movieYfeedback.removeAttribute('style')
@@ -90,12 +108,14 @@ function addMovie(movie) {
 
 function getSelected(val) {
     let row = val.parentNode.parentNode;
-    console.log(val)
+    let name = row.children[1].innerHTML
     if (val.checked) {
+        changeWatched(name)
         val.setAttribute('checked', '')
         row.classList.remove('table-danger')
         row.classList.add('table-success')
     } else {
+        changeWatched(name)
         val.removeAttribute('checked')
         row.classList.remove('table-success')
         row.classList.add('table-danger')
@@ -114,8 +134,7 @@ function filterMovies() {
             searchRes.push(movie);
         }
     });
-    moviesToShow = searchRes;
-    displayMovies(moviesToShow);
+    displayMovies(searchRes);
 }
 
 // function getRows() {
@@ -131,16 +150,48 @@ function filterMovies() {
 //         console.log(item)
 //     }
 
+function containsMovie(name) {
+    let rez = false;
+    movies.forEach((movie) => {
+        if (movie.name === name) rez=true;
+    })
+    return rez;
+}
+
+function changeWatched(name) {
+    movies.forEach((movie) => {
+        if (movie.name === name) {
+            if(movie.watched) movie.watched = false;
+            else movie.watched = true;
+        }
+    })
+}
 
 function displayMovies(moviesToShow = null) {
-    if(moviesToShow == null){moviesToShow = movies}
+    if (moviesToShow == null) {
+        moviesToShow = movies
+    }
     let tableContent = '';
     moviesToShow.forEach((movie) => {
         let actorsContent = ''
         movie.actors.forEach((actor) => {
             actorsContent += `<li>${actor}</li>`
         })
-        tableContent += `<tr class="table-danger text-center">
+        if(movie.watched){
+            tableContent += `<tr class="table-success text-center">
+                            <td>
+                                <input class='form-check-input' type="checkbox" onclick="getSelected(this)" checked="'">
+                                <input type='hidden' value=${movie.watched}>
+                            </td>
+                            <td>${movie.name}</td>
+                            <td>${movie.year}</td>
+                            <td>${movie.country}</td>
+                            <td>${movie.note}</td>
+                            <td><ul>${actorsContent}</ul></td>
+                         </tr>`;
+        }
+        else {
+            tableContent += `<tr class="table-danger text-center">
                             <td>
                                 <input class='form-check-input' type="checkbox" onclick="getSelected(this)">
                                 <input type='hidden' value=${movie.watched}>
@@ -151,6 +202,7 @@ function displayMovies(moviesToShow = null) {
                             <td>${movie.note}</td>
                             <td><ul>${actorsContent}</ul></td>
                          </tr>`;
+        }
     });
     document.getElementById('movies_table_body').innerHTML = tableContent;
 }
