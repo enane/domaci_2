@@ -11,8 +11,6 @@ let movies = [{
     watched: false, name: 'film3', year: '2011', country: 'zemlja3', note: ' dfdfdf fgdg sdfd', actors: ['glumac1']
 }]
 
-// getRows();
-
 document.getElementById('search_form').addEventListener('submit', (e) => {
     e.preventDefault();
     filterMovies();
@@ -113,12 +111,11 @@ function filterMovies() {
     let searchRes = []
     movies.forEach((movie) => {
         if (movie.name.toLowerCase().includes(term) || movie.year.includes(term) || movie.country.toLowerCase().includes(term)) {
-
             searchRes.push(movie);
         }
     });
-    movies = searchRes;
-    displayMovies();
+    moviesToShow = searchRes;
+    displayMovies(moviesToShow);
 }
 
 // function getRows() {
@@ -135,9 +132,10 @@ function filterMovies() {
 //     }
 
 
-function displayMovies() {
+function displayMovies(moviesToShow = null) {
+    if(moviesToShow == null){moviesToShow = movies}
     let tableContent = '';
-    movies.forEach((movie) => {
+    moviesToShow.forEach((movie) => {
         let actorsContent = ''
         movie.actors.forEach((actor) => {
             actorsContent += `<li>${actor}</li>`
