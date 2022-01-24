@@ -63,13 +63,6 @@ function checkMovieInput() {
             name.classList.remove('is-invalid');
         }
     }
-    //else if (containsMovie(name.value)) {
-    //     console.log(containsMovie(name.value));
-    //     console.log('sadrzi film')
-    //     document.getElementById('movie_nameFeedback').innerHTML = 'Movie already exists.';
-    //     name.classList.add('is-invalid');
-    //     rez = false;
-    // } else name.classList.remove('is-invalid');
     if (year.value > 2022 || year.value < 1895) {
         year.classList.add('is-invalid')
         movieYfeedback.removeAttribute('style')
@@ -138,18 +131,6 @@ function filterMovies() {
     displayMovies(searchRes);
 }
 
-// function getRows() {
-//     //Reference the Table.
-//     var grid = document.getElementById("movies_table_body");
-//
-//     //Reference the CheckBoxes in Table.
-//     var rows = grid.getElementsByTagName("tr");
-//     console.log(rows)
-//     console.log(rows[2])
-//     console.log(rows.length)
-//     for (let item of rows) {
-//         console.log(item)
-//     }
 
 function containsMovie(name) {
     let rez = false;
